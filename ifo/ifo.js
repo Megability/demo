@@ -59,8 +59,26 @@ const init = async () => {
     // ... 或 ...
     // let contractWithSigner = new Contract(contractAddress, abi, wallet)
 
+    let overrides = {
+
+        // The maximum units of gas for the transaction to use
+        //gasLimit: 23000,
+    
+        // The price (in wei) per unit of gas
+        gasPrice: ethers.utils.parseUnits('7.0', 'gwei'),
+    
+        // The nonce to use in the transaction
+        //nonce: 123,
+    
+        // The amount to send with the transaction (i.e. msg.value)
+        //value: ethers.utils.parseEther('1.0'),
+    
+        // The chain ID (or network ID) to use
+        //chainId: 1
+    
+    };
     // 设置一个新值，返回交易
-    let tx = await contractWithSigner.setValue("123");
+    let tx = await contractWithSigner.setValue("1234", overrides);
 
     console.log(tx.hash);
 
