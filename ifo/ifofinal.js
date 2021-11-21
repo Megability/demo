@@ -72,8 +72,12 @@ const start = async () => {
     console.time('getValue');
     const promises = wallets.map(x => getValue(x));
     for (const promise of promises) {
-        const data = await promise;
-        console.log(`Data: ${data}`);
+        //try{
+            const data = await promise;
+            console.log(`Data: ${data}`);
+        //} catch (err) {
+        //    console.error(err)
+        //}
     }
     console.timeEnd('getValue');
 
@@ -81,8 +85,12 @@ const start = async () => {
     console.time('setValue');
     const spromises = wallets.map(x => setValue(x));
     for (const spromise of spromises) {
-        const data = await spromise;
-        console.log(`Data: ${data}`);
+        //try{
+            const data = await spromise;
+            console.log(`Data: ${data}`);
+        //} catch (err) {
+        //    console.error(err)
+        //}
     }
     console.timeEnd('setValue');
 

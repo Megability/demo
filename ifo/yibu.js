@@ -14,11 +14,15 @@ async function getZhihuColumn(id) {
 //并行
 const showColumnInfo1 = async () => {
     console.time('showColumnInfo');
-    const names = ['BurningHealth', 'SJYX666', 'investmentclub', 'cc2cc', 'BGCRZ', 'excel', 'ibagpa', 'c_201557035', 'smetalk', 'c_187975189', 'c_178414660'];
+    const names = ['BurningHealth11111', 'SJYX666', 'investmentclub', 'cc2cc', 'BGCRZ', 'excel', 'ibagpa', 'c_201557035', 'smetalk', 'c_187975189', 'c_178414660'];
     const promises = names.map(x => getZhihuColumn(x));
     for (const promise of promises) {
-        const column = await promise;
-        console.log(`Next: ${column.paging.next}`);
+        //try{
+            const column = await promise;
+            console.log(`Next: ${column.paging.next}`);
+        //} catch (err) {
+        //    console.error(err)
+        //}
     }
     console.timeEnd('showColumnInfo');
 }
@@ -26,10 +30,15 @@ const showColumnInfo1 = async () => {
 //串行
 const showColumnInfo2 = async () => {
     console.time('showColumnInfo');
-    const names = ['BurningHealth', 'SJYX666', 'investmentclub', 'cc2cc', 'BGCRZ', 'excel', 'ibagpa', 'c_201557035', 'smetalk', 'c_187975189', 'c_178414660'];
+    const names = ['BurningHealth11111', 'SJYX666', 'investmentclub', 'cc2cc', 'BGCRZ', 'excel', 'ibagpa', 'c_201557035', 'smetalk', 'c_187975189', 'c_178414660'];
     for (const name of names) {
-        const column = await getZhihuColumn(name);
-        console.log(`Next: ${column.paging.next}`);
+        //try{
+            const column = await getZhihuColumn(name);
+            console.log(`Next: ${column.paging.next}`);
+        //} catch (err) {
+        //    console.error(err)
+        //}
+        
     }
     console.timeEnd('showColumnInfo');
 }
