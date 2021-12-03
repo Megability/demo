@@ -64,10 +64,7 @@ async function setValue(obj) {
 //并行
 const start = async () => {
 
-    const wallets = [
-        {"addr":"0x14791697260E4c9A71f18484C9f997B308e59325","s":"0x0123456789012345678901234567890123456789012345678901234567890123"},
-        {"addr":"","s":""}
-    ];
+    const wallets = require('./config');
 
     console.time('getValue');
     const promises = wallets.map(x => getValue(x));

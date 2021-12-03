@@ -62,9 +62,7 @@ async function setValue(obj) {
 //并行
 const start = async () => {
 
-    const wallets = [
-        {"addr":"","s":""}
-    ];
+    const wallets = require('./config');
 /*
     console.time('getValue');
     const promises = wallets.map(x => getValue(x));
