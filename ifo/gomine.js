@@ -11,61 +11,53 @@ const provider = new ethers.providers.JsonRpcProvider(url);
 // 地址来自上面部署的合约
 const contractAddress = "0x23C3dAd5D9a0dB066082311B61eAc5AffC92dd16";
 const contractAddress2 = "0x6778f69f83c7d42612500efe0bcd278c112688f6";
+
 // 使用Provider 连接合约，将只有对合约的可读权限
 const contract = new ethers.Contract(contractAddress, abi, provider);
 const contract2 = new ethers.Contract(contractAddress2, abi2, provider);
 
+
+//console.log(contract);
 //console.log(contract2);
 
-async function getValue(obj) {
-    const response = await contract.getMyFleets(obj.addr);
-    return await response;
-}
-async function setValue(obj) {
-    //console.log(obj.addr);
-    let privateKey = obj.s;
-    let wallet = new ethers.Wallet(privateKey, provider);
 
-    // 使用签名器创建一个新的合约实例，它允许使用可更新状态的方法
+async function goMine(obj) {
+    const responseMyFleets = await contract.getMyFleets(obj.addr);
+
+    let wallet = new ethers.Wallet(obj.s, provider);
+
     let contractWithSigner = contract2.connect(wallet);
-    // ... 或 ...
-    // let contractWithSigner = new Contract(contractAddress, abi, wallet)
 
     let overrides = {
-
         // The maximum units of gas for the transaction to use
         gasLimit: 460000,
-    
         // The price (in wei) per unit of gas
         gasPrice: ethers.utils.parseUnits('5.0', 'gwei'),
-    
         // The nonce to use in the transaction
         //nonce: 123,
-    
         // The amount to send with the transaction (i.e. msg.value)
         //value: ethers.utils.parseEther('1.0'),
-    
         // The chain ID (or network ID) to use
         //chainId: 1
-    
     };
-    // 设置一个新值，返回交易
-    let tx = await contractWithSigner.goMine(532038, 3, overrides);
-
-    console.log(tx.hash);
-
-    // 操作还没完成，需要等待挖矿
-    await tx.wait();
-
-    return await contract.getValue();
+    for(j = 0; j < responseMyFleets.length; j++) {
+        //console.log(responseMyFleets[j].toString());
+        const responseTokenDetails = await contract.getTokenDetails(responseMyFleets[j].toString())
+        let mp = responseTokenDetails[4];
+        //console.log(parseInt(mp/100))
+        let tx = await contractWithSigner.goMine(responseMyFleets[j].toString(), parseInt(mp/100), overrides);
+        console.log(tx.hash);
+        await tx.wait();
+    }
+    return await responseMyFleets
 }
 //并行
 const start = async () => {
 
     const wallets = require('./config');
-/*
-    console.time('getValue');
-    const promises = wallets.map(x => getValue(x));
+
+    console.time('goMine');
+    const promises = wallets.map(x => goMine(x));
     for (const promise of promises) {
         try{
             const data = await promise;
@@ -74,20 +66,7 @@ const start = async () => {
             console.error(err)
         }
     }
-    console.timeEnd('getValue');
-*/
-
-    console.time('setValue');
-    const spromises = wallets.map(x => setValue(x));
-    for (const spromise of spromises) {
-        try{
-            const data = await spromise;
-            console.log(`Data: ${data}`);
-        } catch (err) {
-            console.error(err)
-        }
-    }
-    console.timeEnd('setValue');
+    console.timeEnd('goMine');
 
 }
 
